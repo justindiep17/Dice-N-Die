@@ -1,7 +1,7 @@
 import "./App.css";
 import BtnsBarSmall from "./BtnsBarSmall";
 import BtnsBar from "./BtnsBar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TiBackspaceOutline } from "react-icons/ti";
 
 function App() {
@@ -28,6 +28,83 @@ function App() {
 
   window.addEventListener("resize", onWindowResize);
 
+  const calculateRoll = () => {
+    let sumSoFar = 0;
+    let previousDigits = "";
+    let add = true;
+    let justSeenOp = false;
+    for (let i = 0; i < calcText.length; i++) {
+      if (calcText[i].charAt(0) === "d") {
+        // one of either d100, d20, d12, ..., d3, d2
+        const dNum = parseInt(calcText[i].substring(1, calcText[i].length));
+        let multiplier = 1;
+        if (previousDigits !== "") {
+          // there is multiplier in front of d#
+          multiplier = parseInt(previousDigits);
+        }
+        let element = (Math.floor(Math.random() * dNum) + 1) * multiplier;
+        if (add) {
+          sumSoFar += element;
+        } else {
+          sumSoFar -= element;
+        }
+        previousDigits = "";
+        justSeenOp = false;
+      } else if (calcText[i] === "+") {
+        // encountered + or - need to now add previousDigits
+        if (justSeenOp) {
+          // two operators in a row
+          sumSoFar = "ERROR";
+          break;
+        } else if (previousDigits !== "") {
+          // previous item isn't the empty string (ie. like at beggining)
+          let element = parseInt(previousDigits);
+          if (add) {
+            sumSoFar += element;
+          } else {
+            sumSoFar -= element;
+          }
+        }
+        add = true;
+        previousDigits = "";
+        justSeenOp = true;
+      } else if (calcText[i] === "-") {
+        // encountered + or - need to now add previousDigits
+        if (justSeenOp) {
+          // two operators in a row
+          sumSoFar = "ERROR";
+          break;
+        } else if (previousDigits !== "") {
+          // previous item isn't the empty string (ie. like at beggining)
+          let element = parseInt(previousDigits);
+          if (add) {
+            sumSoFar += element;
+          } else {
+            sumSoFar -= element;
+          }
+        }
+        add = false;
+        previousDigits = "";
+        justSeenOp = true;
+      } else {
+        // encountered a digit 0-9, add this digit to previousItems but don't add yet
+        previousDigits += calcText[i];
+        justSeenOp = false;
+        continue;
+      }
+    }
+    if (previousDigits !== "" && sumSoFar !== "ERROR") {
+      let element = parseInt(previousDigits);
+      if (add) {
+        sumSoFar += element;
+      } else {
+        sumSoFar -= element;
+      }
+    }
+    console.log(sumSoFar);
+    return sumSoFar;
+  };
+
   if (smallScreen) {
     return (
       <main>
@@ -36,13 +113,21 @@ function App() {
             <input type="text" readOnly="true" value={calcTextStr}></input>
             <a
               id="backspace-btn"
-              href="#"
               onClick={(e) => {
                 e.preventDefault();
-                console.log(calcText);
-                calcText.pop();
+                let popped = calcText.pop();
                 setCalcTxt(calcText);
                 setCalcTxtStr(getCalculatorText(calcText));
+                if (calcText.length === 0) {
+                  setJustUsedD(false);
+                } else {
+                  const lastChar = calcText[calcText.length - 1];
+                  if (lastChar === "+" || lastChar.length == 1) {
+                    setJustUsedD(false);
+                  } else {
+                    setJustUsedD(true);
+                  }
+                }
               }}
             >
               <TiBackspaceOutline size={48} />
@@ -51,9 +136,17 @@ function App() {
           <BtnsBarSmall
             onBtnClick={setCalcTxt}
             onBtnClick2={setCalcTxtStr}
+            onBtnClick3={setJustUsedD}
+            justUsedD={justUsedD}
             calcText={calcText}
           />
-          <div id="roll-btn">
+          <div
+            id="roll-btn"
+            onClick={(e) => {
+              e.preventDefault();
+              calculateRoll();
+            }}
+          >
             <a>ROLL</a>
           </div>
         </div>
@@ -72,13 +165,21 @@ function App() {
             ></input>
             <a
               id="backspace-btn"
-              href="#"
               onClick={(e) => {
                 e.preventDefault();
-                console.log(calcText);
                 calcText.pop();
                 setCalcTxt(calcText);
                 setCalcTxtStr(getCalculatorText(calcText));
+                if (calcText.length === 0) {
+                  setJustUsedD(false);
+                } else {
+                  const lastChar = calcText[calcText.length - 1];
+                  if (lastChar === "+" || lastChar.length == 1) {
+                    setJustUsedD(false);
+                  } else {
+                    setJustUsedD(true);
+                  }
+                }
               }}
             >
               <TiBackspaceOutline size={48} />
@@ -87,10 +188,19 @@ function App() {
           <BtnsBar
             onBtnClick={setCalcTxt}
             onBtnClick2={setCalcTxtStr}
+            onBtnClick3={setJustUsedD}
+            justUsedD={justUsedD}
             calcText={calcText}
           />
           <div id="roll-btn">
-            <a>ROLL</a>
+            <a
+              onClick={(e) => {
+                e.preventDefault();
+                calculateRoll();
+              }}
+            >
+              ROLL
+            </a>
           </div>
         </div>
       </main>

@@ -1,6 +1,12 @@
 import Row from "./Row";
 
-function BtnsBar({ onBtnClick, onBtnClick2, calcText }) {
+function BtnsBar({
+  onBtnClick,
+  onBtnClick2,
+  onBtnClick3,
+  justUsedD,
+  calcText,
+}) {
   const RED = "#D32F2F";
   const GREEN = "#689F38";
   const AMBER = "#FFA000";
@@ -24,6 +30,8 @@ function BtnsBar({ onBtnClick, onBtnClick2, calcText }) {
         ]}
         onBtnClick={onBtnClick}
         onBtnClick2={onBtnClick2}
+        onBtnClick3={onBtnClick3}
+        justUsedD={justUsedD}
         calcText={calcText}
       />
       <Row
@@ -38,6 +46,8 @@ function BtnsBar({ onBtnClick, onBtnClick2, calcText }) {
         ]}
         onBtnClick={onBtnClick}
         onBtnClick2={onBtnClick2}
+        onBtnClick3={onBtnClick3}
+        justUsedD={justUsedD}
         calcText={calcText}
       />
       <Row
@@ -52,6 +62,8 @@ function BtnsBar({ onBtnClick, onBtnClick2, calcText }) {
         ]}
         onBtnClick={onBtnClick}
         onBtnClick2={onBtnClick2}
+        onBtnClick3={onBtnClick3}
+        justUsedD={justUsedD}
         calcText={calcText}
       />
     </div>

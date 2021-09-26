@@ -54,13 +54,15 @@ main {
   padding-right: 1rem;
   margin: 0;
 }
+#backspace-btn:hover {
+  cursor: pointer;
+}
 #btns-bar {
   display: flex;
   flex-direction: column;
   background-color: grey;
   flex: 1 1 auto;
 }
-
 .row {
   font-size: 2rem;
   padding: 0;
@@ -88,6 +90,7 @@ main {
 .calc-btn:hover {
   font-size: 1.75rem;
   transition: all 0.5s;
+  cursor: pointer;
 }
 
 #roll-btn {
@@ -103,4 +106,13 @@ main {
   color: white;
   margin: 0;
   padding: 0.75rem 0;
+}
+#roll-btn a {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+
+#roll-btn:hover {
+  cursor: pointer;
 }
