@@ -19,22 +19,32 @@ main {
   #calculator {
     height: 80%;
   }
+  #display-bar input {
+    width: calc(100% * 2 / 3);
+  }
+  #backsapce-btn {
+    flex: 5;
+  }
 }
 #display-bar {
-  width: auto;
+  max-width: 100%;
   background-color: white;
   margin: 0;
   padding: 0;
   display: flex;
+  box-sizing: b;
 }
 #display-bar input {
-  flex: 10;
+  flex: 15;
   padding: 0.95rem 1.25rem;
   height: auto;
   border: none;
   font-size: 2.8rem;
   font-family: "Ubuntu";
   font-weight: 600;
+  box-sizing: border-box;
+  width: calc(100% / 16 * 15);
+  margin: 0;
 }
 #backspace-btn {
   display: flex;
@@ -42,6 +52,7 @@ main {
   flex-direction: column;
   justify-content: center;
   padding-right: 1rem;
+  margin: 0;
 }
 #btns-bar {
   display: flex;
