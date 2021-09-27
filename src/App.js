@@ -3,7 +3,9 @@ import BtnsBarSmall from "./BtnsBarSmall";
 import BtnsBar from "./BtnsBar";
 import { useState } from "react";
 import { TiBackspaceOutline, TiTimesOutline } from "react-icons/ti";
-import { FaTimesCircle } from "react-icons/fa";
+import HistoryEntry from "./Components/HistoryEntry";
+import TabsBar from "./Components/TabsBar";
+
 function App() {
   const getCalculatorText = (a) => {
     let str = "";
@@ -17,6 +19,8 @@ function App() {
   const [calcText, setCalcTxt] = useState([]);
   const [calcTextStr, setCalcTxtStr] = useState("");
   const [justUsedD, setJustUsedD] = useState(false);
+  const [onHistoryTab, setOnHistoryTab] = useState(false);
+  const [rollsHistory, setRollHistory] = useState([]);
   const onWindowResize = () => {
     if (window.innerWidth < 992) {
       setScreen(true);
@@ -106,134 +110,165 @@ function App() {
     setCalcTxt([sumSoFarStr]);
     setCalcTxtStr(sumSoFarStr);
     setJustUsedD(false);
+    if (sumSoFar !== "ERROR") {
+      rollsHistory.push(sumSoFar);
+    }
     return sumSoFar;
   };
-
-  if (smallScreen) {
-    return (
-      <main>
-        <div id="calculator">
-          <div id="display-bar">
-            <input type="text" readOnly="true" value={calcTextStr}></input>
-            <div id="display-btns-col">
-              <a
-                class="display-bar-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  calcText.pop();
-                  setCalcTxt(calcText);
-                  setCalcTxtStr(getCalculatorText(calcText));
-                  if (calcText.length === 0) {
-                    setJustUsedD(false);
-                  } else {
-                    const lastChar = calcText[calcText.length - 1];
-                    if (lastChar === "+" || lastChar.length == 1) {
-                      setJustUsedD(false);
-                    } else {
-                      setJustUsedD(true);
-                    }
-                  }
-                }}
-              >
-                <TiBackspaceOutline size={48} />
-              </a>
-              <a
-                class="display-bar-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setCalcTxt([]);
-                  setCalcTxtStr("");
-                  setJustUsedD(false);
-                }}
-              >
-                <TiTimesOutline size={48} />
-              </a>
-            </div>
-          </div>
-
-          <BtnsBarSmall
-            onBtnClick={setCalcTxt}
-            onBtnClick2={setCalcTxtStr}
-            onBtnClick3={setJustUsedD}
-            justUsedD={justUsedD}
-            calcText={calcText}
+  if (!onHistoryTab) {
+    if (smallScreen) {
+      return (
+        <main>
+          <TabsBar
+            onHistoryTab={onHistoryTab}
+            setOnHistoryTab={setOnHistoryTab}
           />
-          <div
-            id="roll-btn"
-            onClick={(e) => {
-              e.preventDefault();
-              calculateRoll();
-            }}
-          >
-            <a>ROLL</a>
-          </div>
-        </div>
-      </main>
-    );
+          <section className="home-pg">
+            <div id="calculator">
+              <div id="display-bar">
+                <input type="text" readOnly="true" value={calcTextStr}></input>
+                <div id="display-btns-col">
+                  <a
+                    className="display-bar-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      calcText.pop();
+                      setCalcTxt(calcText);
+                      setCalcTxtStr(getCalculatorText(calcText));
+                      if (calcText.length === 0) {
+                        setJustUsedD(false);
+                      } else {
+                        const lastChar = calcText[calcText.length - 1];
+                        if (lastChar === "+" || lastChar.length == 1) {
+                          setJustUsedD(false);
+                        } else {
+                          setJustUsedD(true);
+                        }
+                      }
+                    }}
+                  >
+                    <TiBackspaceOutline size={48} />
+                  </a>
+                  <a
+                    className="display-bar-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCalcTxt([]);
+                      setCalcTxtStr("");
+                      setJustUsedD(false);
+                    }}
+                  >
+                    <TiTimesOutline size={48} />
+                  </a>
+                </div>
+              </div>
+
+              <BtnsBarSmall
+                onBtnClick={setCalcTxt}
+                onBtnClick2={setCalcTxtStr}
+                onBtnClick3={setJustUsedD}
+                justUsedD={justUsedD}
+                calcText={calcText}
+              />
+              <div
+                id="roll-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  calculateRoll();
+                }}
+              >
+                <a>ROLL</a>
+              </div>
+            </div>
+          </section>
+        </main>
+      );
+    } else {
+      return (
+        <main>
+          <TabsBar
+            onHistoryTab={onHistoryTab}
+            setOnHistoryTab={setOnHistoryTab}
+          />
+          <section className="home-pg">
+            <div id="calculator">
+              <div id="display-bar">
+                <input
+                  id="display-input"
+                  type="text"
+                  readOnly="true"
+                  value={calcTextStr}
+                ></input>
+                <div id="display-btns-col">
+                  <a
+                    className="display-bar-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      calcText.pop();
+                      setCalcTxt(calcText);
+                      setCalcTxtStr(getCalculatorText(calcText));
+                      if (calcText.length === 0) {
+                        setJustUsedD(false);
+                      } else {
+                        const lastChar = calcText[calcText.length - 1];
+                        if (lastChar === "+" || lastChar.length == 1) {
+                          setJustUsedD(false);
+                        } else {
+                          setJustUsedD(true);
+                        }
+                      }
+                    }}
+                  >
+                    <TiBackspaceOutline size={48} />
+                  </a>
+                  <a
+                    className="display-bar-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCalcTxt([]);
+                      setCalcTxtStr("");
+                      setJustUsedD(false);
+                    }}
+                  >
+                    <TiTimesOutline size={48} />
+                  </a>
+                </div>
+              </div>
+              <BtnsBar
+                onBtnClick={setCalcTxt}
+                onBtnClick2={setCalcTxtStr}
+                onBtnClick3={setJustUsedD}
+                justUsedD={justUsedD}
+                calcText={calcText}
+              />
+              <div id="roll-btn">
+                <a
+                  onClick={(e) => {
+                    e.preventDefault();
+                    calculateRoll();
+                  }}
+                >
+                  ROLL
+                </a>
+              </div>
+            </div>
+          </section>
+        </main>
+      );
+    }
   } else {
+    // onHistoryTab
+    let histEntries = [];
+    for (let i = 0; i < rollsHistory.length; i++) {
+      histEntries.push(<HistoryEntry roll={rollsHistory[i]} index={i} />);
+    }
     return (
       <main>
-        <div id="calculator">
-          <div id="display-bar">
-            <input
-              id="display-input"
-              type="text"
-              readOnly="true"
-              value={calcTextStr}
-            ></input>
-            <div id="display-btns-col">
-              <a
-                class="display-bar-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  calcText.pop();
-                  setCalcTxt(calcText);
-                  setCalcTxtStr(getCalculatorText(calcText));
-                  if (calcText.length === 0) {
-                    setJustUsedD(false);
-                  } else {
-                    const lastChar = calcText[calcText.length - 1];
-                    if (lastChar === "+" || lastChar.length == 1) {
-                      setJustUsedD(false);
-                    } else {
-                      setJustUsedD(true);
-                    }
-                  }
-                }}
-              >
-                <TiBackspaceOutline size={48} />
-              </a>
-              <a
-                class="display-bar-btn"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setCalcTxt([]);
-                  setCalcTxtStr("");
-                  setJustUsedD(false);
-                }}
-              >
-                <TiTimesOutline size={48} />
-              </a>
-            </div>
-          </div>
-          <BtnsBar
-            onBtnClick={setCalcTxt}
-            onBtnClick2={setCalcTxtStr}
-            onBtnClick3={setJustUsedD}
-            justUsedD={justUsedD}
-            calcText={calcText}
-          />
-          <div id="roll-btn">
-            <a
-              onClick={(e) => {
-                e.preventDefault();
-                calculateRoll();
-              }}
-            >
-              ROLL
-            </a>
-          </div>
-        </div>
+        <TabsBar
+          onHistoryTab={onHistoryTab}
+          setOnHistoryTab={setOnHistoryTab}
+        />
+        <section className="hist-pg">{histEntries}</section>
       </main>
     );
   }
