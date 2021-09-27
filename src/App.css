@@ -44,14 +44,11 @@ main {
 }
 #calculator {
   width: 95%;
-  height: 50%;
+  height: 80%;
   display: flex;
   flex-direction: column;
 }
 @media screen and (max-width: 991px) {
-  #calculator {
-    height: 80%;
-  }
   #display-bar input {
     width: calc(100% * 2 / 3);
   }
