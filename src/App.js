@@ -259,8 +259,8 @@ function App() {
   } else {
     // onHistoryTab
     let histEntries = [];
-    for (let i = 0; i < rollsHistory.length; i++) {
-      histEntries.push(<HistoryEntry roll={rollsHistory[i]} index={i} />);
+    for (let i = 1; i < rollsHistory.length + 1; i++) {
+      histEntries.push(<HistoryEntry roll={rollsHistory[i - 1]} index={i} />);
     }
     return (
       <main>
@@ -268,7 +268,17 @@ function App() {
           onHistoryTab={onHistoryTab}
           setOnHistoryTab={setOnHistoryTab}
         />
-        <section className="hist-pg">{histEntries}</section>
+        <section className="hist-pg">
+          <div className="history-entry">
+            <div className="history-index">
+              <div>ROLL #:</div>
+            </div>
+            <div className="history-roll">
+              <div>ROLL VALUE:</div>
+            </div>
+          </div>
+          {histEntries}
+        </section>
       </main>
     );
   }
