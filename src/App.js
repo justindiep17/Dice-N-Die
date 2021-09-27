@@ -1,6 +1,6 @@
 import "./App.css";
-import BtnsBarSmall from "./BtnsBarSmall";
-import BtnsBar from "./BtnsBar";
+import BtnsBarSmall from "./Components/BtnsBarSmall.js";
+import BtnsBar from "./Components/BtnsBar";
 import { useState } from "react";
 import { TiBackspaceOutline, TiTimesOutline } from "react-icons/ti";
 import HistoryEntry from "./Components/HistoryEntry";
@@ -37,6 +37,14 @@ function App() {
     let add = true;
     let justSeenOp = false;
     for (let i = 0; i < calcText.length; i++) {
+      if (calcText[i] === "ERROR") {
+        sumSoFar = "ERROR";
+        const sumSoFarStr = sumSoFar.toString();
+        setCalcTxt([sumSoFarStr]);
+        setCalcTxtStr(sumSoFarStr);
+        setJustUsedD(false);
+        return sumSoFar;
+      }
       if (calcText[i].charAt(0) === "d") {
         // one of either d100, d20, d12, ..., d3, d2
         const dNum = parseInt(calcText[i].substring(1, calcText[i].length));
