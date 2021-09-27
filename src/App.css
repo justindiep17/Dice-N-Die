@@ -46,15 +46,23 @@ main {
   width: calc(100% / 16 * 15);
   margin: 0;
 }
-#backspace-btn {
+#display-btn-col {
   display: flex;
-  flex: 1;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+.display-bar-btn {
+  /* display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center; */
+  display: block;
   padding-right: 1rem;
   margin: 0;
 }
-#backspace-btn:hover {
+.display-bar-btn:hover {
   cursor: pointer;
 }
 #btns-bar {
@@ -73,7 +81,6 @@ main {
   justify-content: space-between;
   margin: 0;
 }
-
 .calc-btn {
   flex: 1;
   display: flex;
@@ -86,13 +93,11 @@ main {
   font-family: "Ubuntu";
   margin: 0;
 }
-
 .calc-btn:hover {
   font-size: 1.75rem;
   transition: all 0.5s;
   cursor: pointer;
 }
-
 #roll-btn {
   display: flex;
   flex-direction: column;

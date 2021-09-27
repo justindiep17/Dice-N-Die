@@ -2,14 +2,9 @@ import "./App.css";
 import BtnsBarSmall from "./BtnsBarSmall";
 import BtnsBar from "./BtnsBar";
 import { useState } from "react";
-import { TiBackspaceOutline } from "react-icons/ti";
-
+import { TiBackspaceOutline, TiTimesOutline } from "react-icons/ti";
+import { FaTimesCircle } from "react-icons/fa";
 function App() {
-  const [smallScreen, setScreen] = useState(window.innerWidth < 600);
-  const [calcText, setCalcTxt] = useState([]);
-  const [calcTextStr, setCalcTxtStr] = useState("");
-  const [justUsedD, setJustUsedD] = useState(false);
-
   const getCalculatorText = (a) => {
     let str = "";
     for (let i = 0; i < a.length; i++) {
@@ -18,6 +13,10 @@ function App() {
     return str;
   };
 
+  const [smallScreen, setScreen] = useState(window.innerWidth < 600);
+  const [calcText, setCalcTxt] = useState([]);
+  const [calcTextStr, setCalcTxtStr] = useState("");
+  const [justUsedD, setJustUsedD] = useState(false);
   const onWindowResize = () => {
     if (window.innerWidth < 992) {
       setScreen(true);
@@ -42,11 +41,13 @@ function App() {
           // there is multiplier in front of d#
           multiplier = parseInt(previousDigits);
         }
-        let element = (Math.floor(Math.random() * dNum) + 1) * multiplier;
-        if (add) {
-          sumSoFar += element;
-        } else {
-          sumSoFar -= element;
+        for (let i = 0; i < multiplier; ++i) {
+          let element = Math.floor(Math.random() * dNum) + 1;
+          if (add) {
+            sumSoFar += element;
+          } else {
+            sumSoFar -= element;
+          }
         }
         previousDigits = "";
         justSeenOp = false;
@@ -101,7 +102,10 @@ function App() {
         sumSoFar -= element;
       }
     }
-    console.log(sumSoFar);
+    const sumSoFarStr = sumSoFar.toString();
+    setCalcTxt([sumSoFarStr]);
+    setCalcTxtStr(sumSoFarStr);
+    setJustUsedD(false);
     return sumSoFar;
   };
 
@@ -111,28 +115,42 @@ function App() {
         <div id="calculator">
           <div id="display-bar">
             <input type="text" readOnly="true" value={calcTextStr}></input>
-            <a
-              id="backspace-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                let popped = calcText.pop();
-                setCalcTxt(calcText);
-                setCalcTxtStr(getCalculatorText(calcText));
-                if (calcText.length === 0) {
-                  setJustUsedD(false);
-                } else {
-                  const lastChar = calcText[calcText.length - 1];
-                  if (lastChar === "+" || lastChar.length == 1) {
+            <div id="display-btns-col">
+              <a
+                class="display-bar-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  calcText.pop();
+                  setCalcTxt(calcText);
+                  setCalcTxtStr(getCalculatorText(calcText));
+                  if (calcText.length === 0) {
                     setJustUsedD(false);
                   } else {
-                    setJustUsedD(true);
+                    const lastChar = calcText[calcText.length - 1];
+                    if (lastChar === "+" || lastChar.length == 1) {
+                      setJustUsedD(false);
+                    } else {
+                      setJustUsedD(true);
+                    }
                   }
-                }
-              }}
-            >
-              <TiBackspaceOutline size={48} />
-            </a>
+                }}
+              >
+                <TiBackspaceOutline size={48} />
+              </a>
+              <a
+                class="display-bar-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCalcTxt([]);
+                  setCalcTxtStr("");
+                  setJustUsedD(false);
+                }}
+              >
+                <TiTimesOutline size={48} />
+              </a>
+            </div>
           </div>
+
           <BtnsBarSmall
             onBtnClick={setCalcTxt}
             onBtnClick2={setCalcTxtStr}
@@ -163,27 +181,40 @@ function App() {
               readOnly="true"
               value={calcTextStr}
             ></input>
-            <a
-              id="backspace-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                calcText.pop();
-                setCalcTxt(calcText);
-                setCalcTxtStr(getCalculatorText(calcText));
-                if (calcText.length === 0) {
-                  setJustUsedD(false);
-                } else {
-                  const lastChar = calcText[calcText.length - 1];
-                  if (lastChar === "+" || lastChar.length == 1) {
+            <div id="display-btns-col">
+              <a
+                class="display-bar-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  calcText.pop();
+                  setCalcTxt(calcText);
+                  setCalcTxtStr(getCalculatorText(calcText));
+                  if (calcText.length === 0) {
                     setJustUsedD(false);
                   } else {
-                    setJustUsedD(true);
+                    const lastChar = calcText[calcText.length - 1];
+                    if (lastChar === "+" || lastChar.length == 1) {
+                      setJustUsedD(false);
+                    } else {
+                      setJustUsedD(true);
+                    }
                   }
-                }
-              }}
-            >
-              <TiBackspaceOutline size={48} />
-            </a>
+                }}
+              >
+                <TiBackspaceOutline size={48} />
+              </a>
+              <a
+                class="display-bar-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCalcTxt([]);
+                  setCalcTxtStr("");
+                  setJustUsedD(false);
+                }}
+              >
+                <TiTimesOutline size={48} />
+              </a>
+            </div>
           </div>
           <BtnsBar
             onBtnClick={setCalcTxt}
